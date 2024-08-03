@@ -10,11 +10,11 @@ import { User } from './users/user.entity';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: '34616096',
-      database: 'park',
+      host:  process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
       entities: [User],
       synchronize: true,
     }), TypeOrmModule.forFeature([User])
@@ -22,4 +22,13 @@ import { User } from './users/user.entity';
   controllers: [AppController, UsersController],
   providers: [AppService, UsersService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor() {
+    console.log('Database configuration:');
+    console.log(`Host: ${process.env.DB_HOST}`);
+    console.log(`Port: ${process.env.DB_PORT}`);
+    console.log(`Username: ${process.env.DB_USERNAME}`);
+    console.log(`Password: ${process.env.DB_PASSWORD ? '*****' : 'Not Set'}`);
+    console.log(`Database: ${process.env.DB_NAME}`);
+  }
+}
