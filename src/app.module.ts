@@ -1,10 +1,13 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersController } from './users/users.controller';
-import { UsersService } from './users/users.service';
+import { UserController } from './users/user.controller';
+import { UserService } from './users/user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/user.entity';
+import { Person } from './person/person.entity';
+import { PersonController } from './person/person.controller';
+import { PersonService } from './person/person.service';
 
 @Module({
   imports: [
@@ -15,12 +18,12 @@ import { User } from './users/user.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User],
+      entities: [User, Person],
       synchronize: true,
-    }), TypeOrmModule.forFeature([User])
+    }), TypeOrmModule.forFeature([User, Person])
   ],
-  controllers: [AppController, UsersController],
-  providers: [AppService, UsersService],
+  controllers: [AppController, UserController, PersonController],
+  providers: [AppService, UserService, PersonService],
 })
 export class AppModule {
   constructor() {

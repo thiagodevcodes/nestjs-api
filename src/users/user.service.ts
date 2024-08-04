@@ -2,11 +2,11 @@ import { ConflictException, HttpStatus, Injectable, InternalServerErrorException
 import { InjectRepository } from '@nestjs/typeorm';
 import { Not, Repository, UpdateResult } from 'typeorm';
 import { User } from './user.entity';
-import { CreatedUserResponse } from './interfaces/CreatedUserResponse';
-import { DeleteUserResponse } from './interfaces/DeleteUserResponse';
+import { UserResponse } from './interfaces/ResponseMessages';
+
 
 @Injectable()
-export class UsersService {
+export class UserService {
     constructor(
         @InjectRepository(User)
         private usersRepository: Repository<User>,
@@ -23,7 +23,7 @@ export class UsersService {
         return user;
     }
 
-    async insert(user: User): Promise<CreatedUserResponse> {
+    async insert(user: User): Promise<UserResponse> {
         const existingUser = await this.usersRepository.findOne({ where: { username: user.username } });   
         if (existingUser) throw new ConflictException(`Usuário ${user.username} já existe`); 
         const savedUser = await this.usersRepository.save(user);
@@ -37,14 +37,20 @@ export class UsersService {
         };
     }
     
-    async update(user: User, id: number): Promise<User> {
+    async update(user: User, id: number): Promise<UserResponse> {
         const result: UpdateResult = await this.usersRepository.update(id, user);
 
         if(result.affected == 0) throw new NotFoundException(`Usuário com Id: ${id} não encontrado.`);
-        return this.usersRepository.findOneBy( { id } );      
+        const userUpdated: User = await this.usersRepository.findOneBy( { id } );     
+        
+        return { 
+            message: "Usuário atualizado com sucesso",
+            user: userUpdated,
+            statusCode: HttpStatus.OK
+        };
     }
 
-    async delete(id: number): Promise<DeleteUserResponse> {
+    async delete(id: number): Promise<UserResponse> {
         const deleteUser = await this.usersRepository.delete(id)
 
         if(deleteUser.affected == 0) throw new NotFoundException(`Usuário com id: ${id} não existe.`)

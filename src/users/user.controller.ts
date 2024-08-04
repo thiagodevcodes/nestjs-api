@@ -1,11 +1,11 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, Redirect, Req } from '@nestjs/common';
-import { UsersService } from './users.service';
+import { UserService } from './user.service';
 import { User } from './user.entity';
-import { CreatedUserResponse } from './interfaces/CreatedUserResponse';
+import { UserResponse } from './interfaces/ResponseMessages';
 
 @Controller("users")
-export class UsersController {
-  constructor(private readonly userService: UsersService) {}
+export class UserController {
+  constructor(private readonly userService: UserService) {}
 
   @Get()
   async findAll(): Promise<User[]> {
@@ -18,7 +18,7 @@ export class UsersController {
   }
 
   @Post()
-  async insert(@Body() user: User): Promise<CreatedUserResponse> {
+  async insert(@Body() user: User): Promise<UserResponse> {
     return this.userService.insert(user)
   }
 

@@ -1,5 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Person } from 'src/person/person.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, Unique } from 'typeorm';
 
 @Entity("tb_users")
 export class User {
@@ -7,6 +8,7 @@ export class User {
   id: number;
 
   @IsNotEmpty()
+  @Unique("UK_username", ["username"])
   @Column()
   username: string;
 
@@ -14,13 +16,11 @@ export class User {
   @Column()
   password: string;
 
-  @IsNotEmpty()
-  @Column()
-  firstName: string;
-
-  @Column()
-  lastName: string;
-
   @Column({ default: true })
   isActive: boolean;
+
+  @IsNotEmpty()
+  @JoinColumn()
+  @OneToOne(() => Person, (person) => person.user, { cascade: true })
+  person: Person
 }

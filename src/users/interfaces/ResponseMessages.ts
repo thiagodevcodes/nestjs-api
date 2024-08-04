@@ -1,8 +1,9 @@
 import { HttpStatus } from "@nestjs/common";
 import { User } from "../user.entity";
 
-export interface CreatedUserResponse {
+export interface UserResponse {
     message: string;
-    user: User;
+    user?: User;
     statusCode: HttpStatus
 }
+
