@@ -1,6 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
 import { Person } from 'src/person/person.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, Unique } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, Unique, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity("tb_users")
 export class User {
@@ -18,6 +18,12 @@ export class User {
 
   @Column({ default: true })
   isActive: boolean;
+
+  @CreateDateColumn()
+  createdAt: Date
+
+  @UpdateDateColumn()
+  updatedAt: Date
 
   @IsNotEmpty()
   @JoinColumn()

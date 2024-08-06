@@ -55,13 +55,35 @@ export class PersonService {
     }
 
     async delete(id: number): Promise<PersonResponse> {
-        const deleteUser = await this.personRepository.delete(id)
+        const deletePerson = await this.personRepository.delete(id)
 
-        if(deleteUser.affected == 0) throw new NotFoundException(`Usuário com id: ${id} não existe.`)
+        if(deletePerson.affected == 0) throw new NotFoundException(`Usuário com id: ${id} não existe.`)
         
         return {
             message: "Usuário deletado com sucesso.",
             statusCode: HttpStatus.OK  
         } 
+    }
+
+    async existCpf(cpf: string): Promise<Boolean> {
+        return await this.personRepository.exists({ where: { cpf }}) 
+        
+    }
+
+    async existEmail(email: string): Promise<Boolean> {
+        return await this.personRepository.exists({ where: { email }})
+    }
+
+    async validPerson(email: string, cpf: string, phone: string): Promise<Boolean> {
+        const existEmail = await this.personRepository.exists({ where: { email }})
+        if(existEmail) return false
+
+        const existCpf = await this.personRepository.exists({ where: { cpf }})
+        if(existCpf) return false
+
+        const existPhone = await this.personRepository.exists({ where: { phone }})
+        if(existPhone) return false
+       
+        return true
     }
 }

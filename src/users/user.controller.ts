@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, Redirect, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, Redirect, Req } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './user.entity';
 import { UserResponse } from './interfaces/ResponseMessages';
@@ -22,7 +22,7 @@ export class UserController {
     return this.userService.insert(user)
   }
 
-  @Put()
+  @Patch()
   async update(@Body() user: User, @Query('id') id: string) {
     return this.userService.update(user, Number(id));
   }

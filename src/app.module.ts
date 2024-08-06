@@ -8,6 +8,9 @@ import { User } from './users/user.entity';
 import { Person } from './person/person.entity';
 import { PersonController } from './person/person.controller';
 import { PersonService } from './person/person.service';
+import { CustomerController } from './customer/customer.controller';
+import { CustomerService } from './customer/customer.service';
+import { Customer } from './customer/customer.entity';
 
 @Module({
   imports: [
@@ -18,12 +21,12 @@ import { PersonService } from './person/person.service';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Person],
+      entities: [User, Person, Customer],
       synchronize: true,
-    }), TypeOrmModule.forFeature([User, Person])
+    }), TypeOrmModule.forFeature([User, Person, Customer])
   ],
-  controllers: [AppController, UserController, PersonController],
-  providers: [AppService, UserService, PersonService],
+  controllers: [AppController, UserController, PersonController, CustomerController],
+  providers: [AppService, UserService, PersonService, CustomerService],
 })
 export class AppModule {
   constructor() {
